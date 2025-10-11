@@ -71,11 +71,11 @@ impl<T: Scalar> Vector<T> for Vector2D<T> {
     }
 
     fn magnitude_f32(&self) -> f32 {
-        (self.x * self.x + self.y * self.y).to_f32().unwrap_or(0.).sqrt()  // TODO handle this
+        (self.x * self.x + self.y * self.y).to_f32().unwrap().sqrt()  // TODO handle this
     }
 
     fn magnitude_f64(&self) -> f64 {
-        (self.x * self.x + self.y * self.y).to_f64().unwrap_or(0.).sqrt()
+        (self.x * self.x + self.y * self.y).to_f64().unwrap().sqrt()
     }
 }
 
@@ -141,11 +141,11 @@ impl<T: Scalar> Vector<T> for Vector3D<T>
     }
 
     fn magnitude_f32(&self) -> f32 {
-        (self.x * self.x + self.y * self.y + self.z * self.z).to_f32().unwrap_or(0.).sqrt()  // TODO
+        (self.x * self.x + self.y * self.y + self.z * self.z).to_f32().unwrap().sqrt()  // TODO
     }
 
     fn magnitude_f64(&self) -> f64 {
-        (self.x * self.x + self.y * self.y + self.z * self.z).to_f64().unwrap_or(0.).sqrt()
+        (self.x * self.x + self.y * self.y + self.z * self.z).to_f64().unwrap().sqrt()
     }
 }
 
@@ -208,10 +208,10 @@ impl<T: Scalar> Vector<T> for Vector4D<T>
     }
 
     fn magnitude_f32(&self) -> f32 {
-        (self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w).to_f32().unwrap_or(0.).sqrt()  // TODO
+        (self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w).to_f32().unwrap().sqrt()  // TODO
     }
 
     fn magnitude_f64(&self) -> f64 {
-        (self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w).to_f64().unwrap_or(0.).sqrt()
+        (self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w).to_f64().unwrap().sqrt()
     }
 }

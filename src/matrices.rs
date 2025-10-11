@@ -2,11 +2,11 @@ use crate::errors::{MatrixErr, VectorErr};
 use crate::types::Scalar;
 use crate::vectors::{Vector, Vector3D, Vector4D};
 
-pub trait Matrix<T: Scalar> where f32: From<T>, Self: Sized, f64: From<T> {
+pub trait Matrix<T: Scalar> : Sized {
     type VEC: Vector<T>;
     fn zero() -> Self;
     fn dimensions(&self) -> (usize, usize);  // EXCLUSIVE
-    fn identity() -> Self where T: From<u8>;
+    fn identity() -> Self;
     fn from_func(f: impl Fn(usize, usize) -> T) -> Self;
     fn get_val(&self, i: usize, j: usize) -> T;
     fn determinant(&self) -> T;
@@ -23,7 +23,7 @@ pub struct Matrix3x3<T: Scalar> {
     _data: [T; 9],
 }
 
-impl<T: Scalar> Matrix<T> for Matrix3x3<T> where f32: From<T>, f64: From<T> {
+impl<T: Scalar> Matrix<T> for Matrix3x3<T> {
     type VEC = Vector3D<T>;
 
     fn zero() -> Self {
@@ -34,10 +34,10 @@ impl<T: Scalar> Matrix<T> for Matrix3x3<T> where f32: From<T>, f64: From<T> {
         (3, 3)
     }
 
-    fn identity() -> Self where T: From<u8> {
+    fn identity() -> Self {
         Self::from_func(|i, j| {
             if i == j {
-                T::from(1)
+                T::from_i8(1).unwrap()  // TODO well this shouldn't panic but let's try
             } else {
                 T::default()
             }
@@ -110,7 +110,7 @@ impl<T: Scalar> Matrix<T> for Matrix3x3<T> where f32: From<T>, f64: From<T> {
 
     fn inverse(&self) -> Option<Self> {
         let det = self.determinant();
-        if f32::from(det).abs() < f32::EPSILON {
+        if det.to_f32().unwrap_or(0.).abs() < f32::EPSILON {  // TODO shouldn't panic either but let's try
             return None;
         }
 
@@ -137,7 +137,7 @@ pub struct Matrix4x4<T: Scalar> {
     _data: [T; 16],
 }
 
-impl<T: Scalar> Matrix<T> for Matrix4x4<T> where f32: From<T>, f64: From<T> {
+impl<T: Scalar> Matrix<T> for Matrix4x4<T> {
     type VEC = Vector4D<T>;
 
     fn zero() -> Self {
@@ -148,10 +148,10 @@ impl<T: Scalar> Matrix<T> for Matrix4x4<T> where f32: From<T>, f64: From<T> {
         (4, 4)
     }
 
-    fn identity() -> Self where T: From<u8> {
+    fn identity() -> Self {
         Self::from_func(|i, j| {
             if i == j {
-                T::from(1)
+                T::from_i32(1).unwrap()  // TODO
             } else {
                 T::default()
             }
@@ -233,7 +233,7 @@ impl<T: Scalar> Matrix<T> for Matrix4x4<T> where f32: From<T>, f64: From<T> {
 
     fn inverse(&self) -> Option<Self> {
         let det = self.determinant();
-        if f32::from(det).abs() < f32::EPSILON {
+        if det.to_f32().unwrap().abs() < f32::EPSILON {  // TODO
             return None;
         }
 
