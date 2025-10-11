@@ -1,14 +1,6 @@
-use std::ops::{Add, Div, Mul, Neg, Sub};
+use num_traits::{AsPrimitive, FromPrimitive, Num, NumCast, Signed, ToPrimitive};
 
-// aka number alias
-pub trait Scalar:
-Add<Output = Self> +
-Sub<Output = Self> +
-Mul<Output = Self> +
-Neg<Output = Self> +
-Div<Output = Self> +
-Copy + Default + PartialEq
-{}
+pub trait Scalar: Signed + ToPrimitive + Default + Copy {}
 
 impl Scalar for f32 {}
 impl Scalar for f64 {}

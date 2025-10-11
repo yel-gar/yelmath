@@ -1,13 +1,11 @@
-use crate::types::Scalar;
 use crate::errors::VectorErr;
-
-
+use crate::types::Scalar;
 
 // vector trait for both 2D and 3D
-pub trait Vector<T: Scalar> where f32: From<T>, f64: From<T>, Self: Sized {
+pub trait Vector<T: Scalar> : Sized {
     fn zero() -> Self;
-    fn from_slice(data: &[T]) -> Result<Self, VectorErr> where Self: Sized;
-    fn from_vec(data: &Vec<T>) -> Result<Self, VectorErr> where Self: Sized;
+    fn from_slice(data: &[T]) -> Result<Self, VectorErr>;
+    fn from_vec(data: &Vec<T>) -> Result<Self, VectorErr>;
     fn invert(&self) -> Self;
     fn add(&self, other: &Self) -> Self;
     fn sub(&self, other: &Self) -> Self;
@@ -17,19 +15,19 @@ pub trait Vector<T: Scalar> where f32: From<T>, f64: From<T>, Self: Sized {
     fn magnitude_f64(&self) -> f64;
 }
 
-#[derive(PartialEq, Clone)]
+#[derive(PartialEq, Clone, Debug)]
 pub struct Vector2D<T> {
     pub x: T,
     pub y: T,
 }
 
 impl<T> Vector2D<T> {
-    fn new(x: T, y: T) -> Self {
+    pub fn new(x: T, y: T) -> Self {
         Self { x, y }
     }
 }
 
-impl<T: Scalar> Vector<T> for Vector2D<T> where f32: From<T>, f64: From<T> {
+impl<T: Scalar> Vector<T> for Vector2D<T> {
     fn zero() -> Self {
         Self {x: T::default(), y: T::default()}
     }
@@ -73,14 +71,15 @@ impl<T: Scalar> Vector<T> for Vector2D<T> where f32: From<T>, f64: From<T> {
     }
 
     fn magnitude_f32(&self) -> f32 {
-        f32::from(self.x * self.x + self.y * self.y).sqrt()
+        (self.x * self.x + self.y * self.y).to_f32().unwrap_or(0.).sqrt()  // TODO handle this
     }
 
     fn magnitude_f64(&self) -> f64 {
-        f64::from(self.x * self.x + self.y * self.y).sqrt()
+        (self.x * self.x + self.y * self.y).to_f64().unwrap_or(0.).sqrt()
     }
 }
 
+#[derive(PartialEq, Clone, Debug)]
 pub struct Vector3D<T> {
     pub x: T,
     pub y: T,
@@ -97,7 +96,7 @@ impl<T> Vector3D<T> {
     }
 }
 
-impl<T: Scalar> Vector<T> for Vector3D<T> where f32: From<T>, f64: From<T>
+impl<T: Scalar> Vector<T> for Vector3D<T>
 {
     fn zero() -> Self {
         Self { x: T::default(), y: T::default(), z: T::default() }
@@ -142,14 +141,15 @@ impl<T: Scalar> Vector<T> for Vector3D<T> where f32: From<T>, f64: From<T>
     }
 
     fn magnitude_f32(&self) -> f32 {
-        f32::from(self.x * self.x + self.y * self.y + self.z * self.z).sqrt()
+        (self.x * self.x + self.y * self.y + self.z * self.z).to_f32().unwrap_or(0.).sqrt()  // TODO
     }
 
     fn magnitude_f64(&self) -> f64 {
-        f64::from(self.x * self.x + self.y * self.y + self.z * self.z).sqrt()
+        (self.x * self.x + self.y * self.y + self.z * self.z).to_f64().unwrap_or(0.).sqrt()
     }
 }
 
+#[derive(PartialEq, Clone, Debug)]
 pub struct Vector4D<T> {
     pub x: T,
     pub y: T,
@@ -163,7 +163,7 @@ impl<T> Vector4D<T> {
     }
 }
 
-impl<T: Scalar> Vector<T> for Vector4D<T> where f32: From<T>, f64: From<T>
+impl<T: Scalar> Vector<T> for Vector4D<T>
 {
     fn zero() -> Self {
         Self { x: T::default(), y: T::default(), z: T::default(), w: T::default() }
@@ -208,10 +208,10 @@ impl<T: Scalar> Vector<T> for Vector4D<T> where f32: From<T>, f64: From<T>
     }
 
     fn magnitude_f32(&self) -> f32 {
-        f32::from(self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w).sqrt()
+        (self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w).to_f32().unwrap_or(0.).sqrt()  // TODO
     }
 
     fn magnitude_f64(&self) -> f64 {
-        f64::from(self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w).sqrt()
+        (self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w).to_f64().unwrap_or(0.).sqrt()
     }
 }

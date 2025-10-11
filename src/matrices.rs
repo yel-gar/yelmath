@@ -118,7 +118,7 @@ impl<T: Scalar> Matrix<T> for Matrix3x3<T> where f32: From<T>, f64: From<T> {
             if (i + j) % 2 == 0 {
                 self.minor(j, i) / det
             } else {
-                -self.minor(i, j) / det
+                -self.minor(j, i) / det
             }
         }))
     }
@@ -241,7 +241,7 @@ impl<T: Scalar> Matrix<T> for Matrix4x4<T> where f32: From<T>, f64: From<T> {
             if (i + j) % 2 == 0 {
                 self.minor(j, i) / det
             } else {
-                -self.minor(i, j) / det
+                -self.minor(j, i) / det
             }
         }))
     }
