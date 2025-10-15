@@ -128,7 +128,7 @@ mod tests {
         
         assert_eq!(v2d1.add(&v2d2), v2dr);
         assert_eq!(v3d1.add(&v3d2), v3dr);
-        assert_eq!(v2d1.add(&v2d2), v2dr);
+        assert_eq!(v4d1.add(&v4d2), v4dr);
     }
     
     #[test]
@@ -147,7 +147,7 @@ mod tests {
 
         assert_eq!(v2d1.sub(&v2d2), v2dr);
         assert_eq!(v3d1.sub(&v3d2), v3dr);
-        assert_eq!(v2d1.sub(&v2d2), v2dr);
+        assert_eq!(v4d1.sub(&v4d2), v4dr);
     }
     
     #[test]
@@ -520,6 +520,9 @@ mod tests {
             [3, 3, 4, 2]
         ]);
         let v4 = Vector4D::new(0, 1, -2, 2);
-        let r4 = Vector4D::new(-4, -2, -6, -1);
+        let r4 = Vector4D::new(-4, -3, -6, -1);
+
+        assert_eq!(m3.mul_vec(&v3), r3);
+        assert_eq!(m4.mul_vec(&v4), r4);
     }
 }

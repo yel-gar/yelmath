@@ -259,7 +259,7 @@ impl<T: Scalar> Matrix<T> for Matrix4x4<T> {
         let mut output_data = [T::default(); 4];
         for i in 0..4 {
             for j in 0..4 {
-                output_data[i] = output_data[i] + vec_data[i] * self.get_val(i, j);
+                output_data[i] = output_data[i] + vec_data[j] * self.get_val(i, j);
             }
         }
 
