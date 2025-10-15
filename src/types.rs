@@ -1,4 +1,4 @@
-use num_traits::{AsPrimitive, FromPrimitive, Num, NumCast, Signed, ToPrimitive};
+use num_traits::{FromPrimitive, Signed, ToPrimitive};
 
 pub trait Scalar: Signed + ToPrimitive + FromPrimitive + Default + Copy {}
 

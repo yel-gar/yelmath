@@ -5,7 +5,6 @@ mod types;
 
 #[cfg(test)]
 mod tests {
-    use std::error::Error;
     use crate::vectors::*;
     use crate::matrices::*;
 

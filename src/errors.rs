@@ -1,7 +1,7 @@
-use std::fmt::{write, Debug, Display, Formatter};
+use std::fmt::{Debug, Display, Formatter};
 
 pub enum VectorErr {
-    LengthErr {expected: usize, got: usize},
+    LengthErr { expected: usize, got: usize },
 }
 
 impl Debug for VectorErr {
@@ -27,7 +27,7 @@ impl Display for VectorErr {
 impl std::error::Error for VectorErr {}
 
 pub enum MatrixErr {
-    NotInvertible
+    NotInvertible,
 }
 
 impl Debug for MatrixErr {
