@@ -205,6 +205,15 @@ mod tests {
         assert!(f32_eq(v3d.magnitude_f32(), v3drf32) && f64_eq(v3d.magnitude_f64(), v3drf64));
         assert!(f32_eq(v4d.magnitude_f32(), v4drf32) && f64_eq(v4d.magnitude_f64(), v4drf64));
     }
+
+    #[test]
+    fn vec_cross() {
+        let v3_1 = Vector3D::new(1, 2, 3);
+        let v3_2 = Vector3D::new(2, 1, -2);
+        let v3r = Vector3D::new(-7, 8, -3);
+
+        assert_eq!(v3_1.cross(&v3_2), v3r);
+    }
     
     #[test]
     fn mat_zero() {

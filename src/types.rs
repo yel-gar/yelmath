@@ -1,6 +1,6 @@
-use num_traits::{FromPrimitive, Signed, ToPrimitive};
+use num_traits::{One, Signed, ToPrimitive};
 
-pub trait Scalar: Signed + ToPrimitive + FromPrimitive + Default + Copy {}
+pub trait Scalar: Signed + ToPrimitive + Default + Copy + One {}
 
 impl Scalar for f32 {}
 impl Scalar for f64 {}

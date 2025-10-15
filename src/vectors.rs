@@ -107,13 +107,13 @@ pub struct Vector3D<T> {
     pub z: T,
 }
 
-impl<T> Vector3D<T> {
+impl<T: Scalar> Vector3D<T> {
     pub fn new(x: T, y: T, z: T) -> Self {
         Self { x, y, z }
     }
 
     pub fn cross(&self, other: &Self) -> Self {
-        todo!()
+        Vector3D::new(self.y * other.z - self.z * other.y, self.z * other.x - self.x * other.z, self.x * other.y - self.y * other.x)
     }
 }
 

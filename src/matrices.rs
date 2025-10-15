@@ -45,7 +45,7 @@ impl<T: Scalar> Matrix<T> for Matrix3x3<T> {
     fn identity() -> Self {
         Self::from_func(|i, j| {
             if i == j {
-                T::from_i8(1).unwrap() // TODO well this shouldn't panic but let's try
+                T::one()
             } else {
                 T::default()
             }
@@ -166,7 +166,7 @@ impl<T: Scalar> Matrix<T> for Matrix4x4<T> {
     fn identity() -> Self {
         Self::from_func(|i, j| {
             if i == j {
-                T::from_i32(1).unwrap() // TODO
+                T::one()
             } else {
                 T::default()
             }
