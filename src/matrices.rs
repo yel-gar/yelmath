@@ -16,6 +16,7 @@ pub trait Matrix<T: Scalar>: Sized {
     fn cross(&self, other: &Self) -> Self;
     fn inverse(&self) -> Option<Self>;
     fn mul_vec(&self, v: &Self::VEC) -> Self::VEC;
+    fn precision_eq(&self, other: &Self, precision: T) -> bool;
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -115,8 +116,8 @@ impl<T: Scalar> Matrix<T> for Matrix3x3<T> {
 
     fn inverse(&self) -> Option<Self> {
         let det = self.determinant();
-        if det.to_f32().unwrap_or(0.).abs() < f32::EPSILON {
-            // TODO shouldn't panic either but let's try
+        // imagine if this panics lol that would be funny
+        if det.to_f32().unwrap().abs() < f32::EPSILON {
             return None;
         }
 
@@ -136,6 +137,17 @@ impl<T: Scalar> Matrix<T> for Matrix3x3<T> {
             v.x * a21 + v.y * a22 + v.z * a23,
             v.x * a31 + v.y * a32 + v.z * a33,
         )
+    }
+
+    fn precision_eq(&self, other: &Self, precision: T) -> bool {
+        for i in 0..3 {
+            for j in 0..3 {
+                if (self.get_val(i, j) - other.get_val(i, j)).abs() > precision {
+                    return false;
+                }
+            }
+        }
+        true
     }
 }
 
@@ -240,8 +252,8 @@ impl<T: Scalar> Matrix<T> for Matrix4x4<T> {
 
     fn inverse(&self) -> Option<Self> {
         let det = self.determinant();
+        // imagine if this panics
         if det.to_f32().unwrap().abs() < f32::EPSILON {
-            // TODO
             return None;
         }
 
@@ -265,5 +277,16 @@ impl<T: Scalar> Matrix<T> for Matrix4x4<T> {
 
         let [x, y, z, w] = output_data;
         Vector4D::new(x, y, z, w)
+    }
+
+    fn precision_eq(&self, other: &Self, precision: T) -> bool {
+        for i in 0..4 {
+            for j in 0..4 {
+                if (self.get_val(i, j) - other.get_val(i, j)).abs() > precision {
+                    return false;
+                }
+            }
+        }
+        true
     }
 }

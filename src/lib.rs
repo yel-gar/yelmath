@@ -507,9 +507,24 @@ mod tests {
     
     #[test]
     fn mat_inverse() {
-        // TODO needs more tests than just inverse
-        assert_eq!(Matrix3x3::<f32>::identity().inverse().unwrap(), Matrix3x3::<f32>::identity());
-        assert_eq!(Matrix4x4::<f32>::identity().inverse().unwrap(), Matrix4x4::<f32>::identity());
+        let i3 = Matrix3x3::<f32>::identity();
+        let i4 = Matrix4x4::<f32>::identity();
+        assert_eq!(Matrix3x3::<f32>::identity().inverse().unwrap(), i3);
+        assert_eq!(Matrix4x4::<f32>::identity().inverse().unwrap(), i4);
+
+        let m3 = Matrix3x3::new([
+            [1., 2., 3.],
+            [2., 8., -4.],
+            [5., 10., 2.]
+        ]);
+        let m4 = Matrix4x4::new([
+            [1., 2., 3., 2.],
+            [2., 8., -4., 3.],
+            [5., 10., 2., 0.],
+            [8., 0., 2., 4.]
+        ]);
+        assert!(m3.cross(&m3.inverse().unwrap()).precision_eq(&i3, 0.001));
+        assert!(m4.cross(&m4.inverse().unwrap()).precision_eq(&i4, 0.001));
     }
     
     #[test]

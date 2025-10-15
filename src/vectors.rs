@@ -92,7 +92,7 @@ impl<T: Scalar> Vector<T> for Vector2D<T> {
     }
 
     fn magnitude_f32(&self) -> f32 {
-        (self.x * self.x + self.y * self.y).to_f32().unwrap().sqrt() // TODO handle this
+        (self.x * self.x + self.y * self.y).to_f32().unwrap().sqrt()
     }
 
     fn magnitude_f64(&self) -> f64 {
@@ -191,7 +191,7 @@ impl<T: Scalar> Vector<T> for Vector3D<T> {
         (self.x * self.x + self.y * self.y + self.z * self.z)
             .to_f32()
             .unwrap()
-            .sqrt() // TODO
+            .sqrt()
     }
 
     fn magnitude_f64(&self) -> f64 {
@@ -296,7 +296,7 @@ impl<T: Scalar> Vector<T> for Vector4D<T> {
         (self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w)
             .to_f32()
             .unwrap()
-            .sqrt() // TODO
+            .sqrt()
     }
 
     fn magnitude_f64(&self) -> f64 {
