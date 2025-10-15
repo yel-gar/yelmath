@@ -8,11 +8,11 @@ mod tests {
     use std::error::Error;
     use crate::vectors::*;
     use crate::matrices::*;
-    
+
     fn f32_eq(f1: f32, f2: f32) -> bool {
         (f1 - f2).abs() <= f32::EPSILON
     }
-    
+
     fn f64_eq(f1: f64, f2: f64) -> bool {
         (f1 - f2).abs() <= f64::EPSILON
     }
@@ -134,17 +134,17 @@ mod tests {
     
     #[test]
     fn vec_sub() {
-        let v2d1 = Vector2D::new(2.0, 4.0);
-        let v2d2 = Vector2D::new(-7.0, 2.0);
-        let v2dr = Vector2D::new(-9.0, 2.0);
+        let v2d1 = Vector2D::new(2, 4);
+        let v2d2 = Vector2D::new(-7, 2);
+        let v2dr = Vector2D::new(9, 2);
 
-        let v3d1 = Vector3D::new(2.0, 4.0, 5.2);
-        let v3d2 = Vector3D::new(-7.0, 2.0, 0.6);
-        let v3dr = Vector3D::new(-9.0, 2.0, 4.6);
+        let v3d1 = Vector3D::new(2, 4, 5);
+        let v3d2 = Vector3D::new(-7, 2, 0);
+        let v3dr = Vector3D::new(9, 2, 5);
 
-        let v4d1 = Vector4D::new(2.0, 4.0, 5.2, 0.0);
-        let v4d2 = Vector4D::new(-7.0, 2.0, 0.6, -15.2);
-        let v4dr = Vector4D::new(-9.0, 2.0, 4.6, 15.2);
+        let v4d1 = Vector4D::new(2, 4, 5, 0);
+        let v4d2 = Vector4D::new(-7, 2, 0, -15);
+        let v4dr = Vector4D::new(9, 2, 5, 15);
 
         assert_eq!(v2d1.sub(&v2d2), v2dr);
         assert_eq!(v3d1.sub(&v3d2), v3dr);
@@ -201,7 +201,7 @@ mod tests {
         let v4d = Vector4D::new(2, -3, 4, 6);
         let v4drf32 = 65f32.sqrt();
         let v4drf64 = 65f64.sqrt();
-        
+
         assert!(f32_eq(v2d.magnitude_f32(), v2drf32) && f64_eq(v2d.magnitude_f64(), v2drf64));
         assert!(f32_eq(v3d.magnitude_f32(), v3drf32) && f64_eq(v3d.magnitude_f64(), v3drf64));
         assert!(f32_eq(v4d.magnitude_f32(), v4drf32) && f64_eq(v4d.magnitude_f64(), v4drf64));
@@ -209,66 +209,318 @@ mod tests {
     
     #[test]
     fn mat_zero() {
-        
+        let m3 = Matrix3x3::new([[0; 3]; 3]);
+        let m4 = Matrix3x3::new([[0; 3]; 3]);
+
+        assert_eq!(m3, Matrix3x3::<i32>::zero());
+        assert_eq!(m4, Matrix3x3::<i32>::zero());
     }
     
     #[test]
     fn mat_dimensions() {
-        
+        assert_eq!(Matrix3x3::<i32>::zero().dimensions(), (3, 3));
+        assert_eq!(Matrix4x4::<i32>::zero().dimensions(), (4, 4));
     }
     
     #[test]
     fn mat_identity() {
-        
+        let m3 = Matrix3x3::new(
+            [
+                [1, 0, 0],
+                [0, 1, 0],
+                [0, 0, 1],
+            ]
+        );
+        let m4 = Matrix4x4::new(
+            [
+                [1, 0, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1]
+            ]
+        );
+
+        assert_eq!(Matrix3x3::<i32>::identity(), m3);
+        assert_eq!(Matrix4x4::<i32>::identity(), m4);
     }
     
     #[test]
     fn mat_from_func() {
-        
+        let m3 = Matrix3x3::from_func(|i, j| {
+            (i * 3 + j) as i32
+        });
+        let m3e = Matrix3x3::new(
+            [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+            ]
+        );
+
+        let m4 = Matrix4x4::from_func(|i, j| {
+            (i * 4 + j) as i32
+        });
+        let m4e = Matrix4x4::new(
+            [
+                [0, 1, 2, 3],
+                [4, 5, 6, 7],
+                [8, 9, 10, 11],
+                [12, 13, 14, 15]
+            ]
+        );
+
+        assert_eq!(m3, m3e);
+        assert_eq!(m4, m4e);
     }
     
     #[test]
     fn mat_get_val() {
-        
+        let m3 = Matrix3x3::new(
+            [
+                [5, 2, 6],
+                [7, 9, -1],
+                [2, 5, 1]
+            ]
+        );
+        let m4 = Matrix4x4::new([
+            [0, 2, -1, 4],
+            [7, 3, 4, 10],
+            [5, 1, -3, -2],
+            [-4, 1, 9, -9]
+        ]);
+
+        assert_eq!(m3.get_val(0, 0), 5);
+        assert_eq!(m3.get_val(1, 1), 9);
+        assert_eq!(m3.get_val(2, 2), 1);
+        assert_eq!(m4.get_val(2, 3), -2);
+        assert_eq!(m4.get_val(0, 0), 0);
+        assert_eq!(m4.get_val(3, 1), 1);
     }
     
     #[test]
     fn mat_determinant() {
-        
+        assert_eq!(Matrix3x3::<i32>::identity().determinant(), 1);
+        assert_eq!(Matrix4x4::<i32>::identity().determinant(), 1);
+
+        let m3 = Matrix3x3::new([
+            [2, -3, 1],
+            [2, 0, -1],
+            [1, 4, 5]
+        ]);
+        let m3_det = 49;
+
+        let m4 = Matrix4x4::new([
+            [1, 3, 1, 4],
+            [3, 9, 5, 15],
+            [0, 2, 1, 1],
+            [0, 4, 2, 3]
+        ]);
+        let m4_det = -4;
+
+        assert_eq!(m3.determinant(), m3_det);
+        assert_eq!(m4.determinant(), m4_det);
     }
     
     #[test]
     fn mat_minor() {
-        
+        let m3 = Matrix3x3::new([
+            [2, -3, 1],
+            [2, 0, -1],
+            [1, 4, 5]
+        ]);
+        assert_eq!(m3.minor(0, 0), 4);
+        assert_eq!(m3.minor(1, 0), -19);
+        assert_eq!(m3.minor(2, 1), -4);
+
+        let m4 = Matrix4x4::new([
+            [1, 2, -3, 1],
+            [7, 2, 0, -1],
+            [-5, 1, 4, 5],
+            [10, 2, -4, 2]
+        ]);
+        assert_eq!(m4.minor(3, 0), 49);
     }
     
     #[test]
     fn mat_transposed() {
-        
+        assert_eq!(Matrix3x3::<i32>::identity().transposed(), Matrix3x3::<i32>::identity());
+        assert_eq!(Matrix4x4::<i32>::identity().transposed(), Matrix4x4::<i32>::identity());
+
+        let m3 = Matrix3x3::new([
+            [2, -3, 1],
+            [2, 0, -1],
+            [1, 4, 5]
+        ]);
+        let m3e = Matrix3x3::new([
+            [2, 2, 1],
+            [-3, 0, 4],
+            [1, -1, 5]
+        ]);
+
+        let m4 = Matrix4x4::new([
+            [1, 2, -3, 1],
+            [7, 2, 0, -1],
+            [-5, 1, 4, 5],
+            [10, 2, -4, 2]
+        ]);
+        let m4e = Matrix4x4::new([
+            [1, 7, -5, 10],
+            [2, 2, 1, 2],
+            [-3, 0, 4, -4],
+            [1, -1, 5, 2]
+        ]);
+
+        assert_eq!(m3.transposed(), m3e);
+        assert_eq!(m4.transposed(), m4e);
     }
     
     #[test]
     fn mat_add() {
-        
+        let m3_1 = Matrix3x3::new([
+            [1, 2, 3],
+            [3, 2, 1],
+            [8, 0, -5]
+        ]);
+        let m3_2 = Matrix3x3::new([
+            [0, 2, 1],
+            [1, 2, 3],
+            [-5, 4, 8]
+        ]);
+        let m3r = Matrix3x3::new([
+            [1, 4, 4],
+            [4, 4, 4],
+            [3, 4, 3]
+        ]);
+
+        let m4_1 = Matrix4x4::new([
+            [0, 1, 2, 3],
+            [4, 5, 6, 0],
+            [1, 2, 3, 4],
+            [5, 0, 1, 2]
+        ]);
+        let m4_2 = Matrix4x4::new([
+            [9, 8, 7, 6],
+            [5, 4, 3, 2],
+            [1, 0, -1, -2],
+            [-3, -4, -5, -6]
+        ]);
+        let m4r = Matrix4x4::new([
+            [9, 9, 9, 9],
+            [9, 9, 9, 2],
+            [2, 2, 2, 2],
+            [2, -4, -4, -4]
+        ]);
+
+        assert_eq!(m3_1.add(&m3_2), m3r);
+        assert_eq!(m4_1.add(&m4_2), m4r);
     }
     
     #[test]
     fn mat_sub() {
-        
+        let m3_1 = Matrix3x3::new([
+            [1, 2, 3],
+            [3, 2, 1],
+            [8, 0, -5]
+        ]);
+        let m3_2 = Matrix3x3::new([
+            [0, 2, 1],
+            [1, 2, 3],
+            [-5, 4, 8]
+        ]);
+        let m3r = Matrix3x3::new([
+            [1, 0, 2],
+            [2, 0, -2],
+            [13, -4, -13]
+        ]);
+
+        let m4_1 = Matrix4x4::new([
+            [0, 1, 2, 3],
+            [4, 5, 6, 0],
+            [1, 2, 3, 4],
+            [5, 0, 1, 2]
+        ]);
+        let m4_2 = Matrix4x4::new([
+            [9, 8, 7, 6],
+            [5, 4, 3, 2],
+            [1, 0, -1, -2],
+            [-3, -4, -5, -6]
+        ]);
+        let m4r = Matrix4x4::new([
+            [-9, -7, -5, -3],
+            [-1, 1, 3, -2],
+            [0, 2, 4, 6],
+            [8, 4, 6, 8]
+        ]);
+
+        assert_eq!(m3_1.sub(&m3_2), m3r);
+        assert_eq!(m4_1.sub(&m4_2), m4r);
     }
     
     #[test]
     fn mat_cross() {
-        
+        let m3_1 = Matrix3x3::new([
+            [1, 2, 3],
+            [3, 2, 1],
+            [8, 0, -5]
+        ]);
+        let m3_2 = Matrix3x3::new([
+            [0, 2, 1],
+            [1, 2, 3],
+            [-5, 4, 8]
+        ]);
+        let m3r = Matrix3x3::new([
+            [-13, 18, 31],
+            [-3, 14, 17],
+            [25, -4, -32]
+        ]);
+
+        let m4_1 = Matrix4x4::new([
+            [0, 1, 2, 3],
+            [4, 5, 6, 0],
+            [1, 0, 3, 4],
+            [5, 0, 1, 2]
+        ]);
+        let m4_2 = Matrix4x4::new([
+            [3, 3, 0, 3],
+            [-2, 1, 0, 2],
+            [1, 0, -1, -2],
+            [-3, -4, 10, 0]
+        ]);
+        let m4r = Matrix4x4::new([
+            [-9, -11, 28, -2],
+            [8, 17, -6, 10],
+            [-6, -13, 37, -3],
+            [10, 7, 19, 13]
+        ]);
+
+        assert_eq!(m3_1.cross(&m3_2), m3r);
+        assert_eq!(m4_1.cross(&m4_2), m4r);
     }
     
     #[test]
     fn mat_inverse() {
-        
+        // TODO needs more tests than just inverse
+        assert_eq!(Matrix3x3::<f32>::identity().inverse().unwrap(), Matrix3x3::<f32>::identity());
+        assert_eq!(Matrix4x4::<f32>::identity().inverse().unwrap(), Matrix4x4::<f32>::identity());
     }
     
     #[test]
     fn mat_mul_vec() {
-        
+        let m3 = Matrix3x3::new([
+            [1, 2, 0],
+            [-2, 5, 1],
+            [6, 4, 0]
+        ]);
+        let v3 = Vector3D::new(2, -3, 3);
+        let r3 = Vector3D::new(-4, -16, 0);
+
+        let m4 = Matrix4x4::new([
+            [1, 0, 2, 0],
+            [7, 1, -1, -3],
+            [5, 0, 2, -1],
+            [3, 3, 4, 2]
+        ]);
+        let v4 = Vector4D::new(0, 1, -2, 2);
+        let r4 = Vector4D::new(-4, -2, -6, -1);
     }
 }

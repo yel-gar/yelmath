@@ -19,8 +19,17 @@ pub trait Matrix<T: Scalar> : Sized {
     fn mul_vec(&self, v: &Self::VEC) -> Self::VEC;
 }
 
+#[derive(Debug, Clone, PartialEq)]
 pub struct Matrix3x3<T: Scalar> {
     _data: [T; 9],
+}
+
+impl<T: Scalar> Matrix3x3<T> {
+    pub fn new(data: [[T; 3]; 3]) -> Self {
+        Self::from_func(|i, j| {
+            data[i][j]
+        })
+    }
 }
 
 impl<T: Scalar> Matrix<T> for Matrix3x3<T> {
@@ -77,7 +86,7 @@ impl<T: Scalar> Matrix<T> for Matrix3x3<T> {
             panic!("Invalid matrix dimensions");
         }
 
-        values[0] * values[2] - values[1] * values[3]
+        values[0] * values[3] - values[1] * values[2]
     }
 
     fn transposed(&self) -> Self {
@@ -133,8 +142,17 @@ impl<T: Scalar> Matrix<T> for Matrix3x3<T> {
     }
 }
 
+#[derive(Debug, Clone, PartialEq)]
 pub struct Matrix4x4<T: Scalar> {
     _data: [T; 16],
+}
+
+impl<T: Scalar> Matrix4x4<T> {
+    pub fn new(data: [[T; 4]; 4]) -> Self {
+        Self::from_func(|i, j| {
+            data[i][j]
+        })
+    }
 }
 
 impl<T: Scalar> Matrix<T> for Matrix4x4<T> {
@@ -176,9 +194,9 @@ impl<T: Scalar> Matrix<T> for Matrix4x4<T> {
         let mut det_sum = T::default();
         for x in 0..4 {
             if x % 2 == 0 {
-                det_sum = det_sum + self.minor(1, x);
+                det_sum = det_sum + self.get_val(0, x) * self.minor(0, x);
             } else {
-                det_sum = det_sum - self.minor(1, x);
+                det_sum = det_sum - self.get_val(0, x) * self.minor(0, x);
             }
         }
 
@@ -199,7 +217,7 @@ impl<T: Scalar> Matrix<T> for Matrix4x4<T> {
         }
 
         Matrix3x3::from_func(|i1, j1| {
-            values[i1 * 4 + j1]
+            values[i1 * 3 + j1]
         }).determinant()
     }
 
