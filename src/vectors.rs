@@ -1,12 +1,19 @@
 use crate::errors::VectorErr;
 use crate::types::Scalar;
+use crate::util::normalize_float_arr;
 
 // vector trait for both 2D and 3D
 pub trait Vector<T: Scalar>: Sized {
+    type VecF32: Vector<f32>;
+    type VecF64: Vector<f64>;
+
     fn zero() -> Self;
     fn from_slice(data: &[T]) -> Result<Self, VectorErr>;
     fn from_vec(data: &Vec<T>) -> Result<Self, VectorErr>;
     fn invert(&self) -> Self;
+    fn normalize_f32(&self) -> Self::VecF32;
+    fn normalize_f64(&self) -> Self::VecF64;
+    fn precision_eq(&self, other: &Self, precision: T) -> bool;
     fn add(&self, other: &Self) -> Self;
     fn sub(&self, other: &Self) -> Self;
     fn dot(&self, other: &Self) -> T;
@@ -28,6 +35,9 @@ impl<T> Vector2D<T> {
 }
 
 impl<T: Scalar> Vector<T> for Vector2D<T> {
+    type VecF32 = Vector2D<f32>;
+    type VecF64 = Vector2D<f64>;
+
     fn zero() -> Self {
         Self {
             x: T::default(),
@@ -64,6 +74,25 @@ impl<T: Scalar> Vector<T> for Vector2D<T> {
             x: -self.x,
             y: -self.y,
         }
+    }
+
+    fn normalize_f32(&self) -> Self::VecF32 {
+        let mut vals = [self.x.to_f32().unwrap(), self.y.to_f32().unwrap()];
+        normalize_float_arr(&mut vals);
+        let [x, y] = vals;
+        Self::VecF32::new(x, y)
+    }
+
+    fn normalize_f64(&self) -> Self::VecF64 {
+        let mut vals = [self.x.to_f64().unwrap(), self.y.to_f64().unwrap()];
+        normalize_float_arr(&mut vals);
+        let [x, y] = vals;
+        Self::VecF64::new(x, y)
+    }
+
+    fn precision_eq(&self, other: &Self, precision: T) -> bool {
+        let cmp_vals = [(self.x, other.x), (self.y, other.y)];
+        cmp_vals.iter().all(|(s, o)| (*s - *o).abs() <= precision)
     }
 
     fn add(&self, other: &Self) -> Self {
@@ -118,6 +147,9 @@ impl<T: Scalar> Vector3D<T> {
 }
 
 impl<T: Scalar> Vector<T> for Vector3D<T> {
+    type VecF32 = Vector3D<f32>;
+    type VecF64 = Vector3D<f64>;
+
     fn zero() -> Self {
         Self {
             x: T::default(),
@@ -157,6 +189,25 @@ impl<T: Scalar> Vector<T> for Vector3D<T> {
             y: -self.y,
             z: -self.z,
         }
+    }
+
+    fn normalize_f32(&self) -> Self::VecF32 {
+        let mut vals = [self.x.to_f32().unwrap(), self.y.to_f32().unwrap(), self.z.to_f32().unwrap()];
+        normalize_float_arr(&mut vals);
+        let [x, y, z] = vals;
+        Self::VecF32::new(x, y, z)
+    }
+
+    fn normalize_f64(&self) -> Self::VecF64 {
+        let mut vals = [self.x.to_f64().unwrap(), self.y.to_f64().unwrap(), self.z.to_f64().unwrap()];
+        normalize_float_arr(&mut vals);
+        let [x, y, z] = vals;
+        Self::VecF64::new(x, y, z)
+    }
+
+    fn precision_eq(&self, other: &Self, precision: T) -> bool {
+        let cmp_vals = [(self.x, other.x), (self.y, other.y), (self.z, other.z)];
+        cmp_vals.iter().all(|(s, o)| (*s - *o).abs() <= precision)
     }
 
     fn add(&self, other: &Self) -> Self {
@@ -217,6 +268,9 @@ impl<T> Vector4D<T> {
 }
 
 impl<T: Scalar> Vector<T> for Vector4D<T> {
+    type VecF32 = Vector4D<f32>;
+    type VecF64 = Vector4D<f64>;
+
     fn zero() -> Self {
         Self {
             x: T::default(),
@@ -259,6 +313,26 @@ impl<T: Scalar> Vector<T> for Vector4D<T> {
             z: -self.z,
             w: -self.w,
         }
+    }
+
+    fn normalize_f32(&self) -> Self::VecF32 {
+        let mut vals = [self.x.to_f32().unwrap(), self.y.to_f32().unwrap(), self.z.to_f32().unwrap(), self.w.to_f32().unwrap()];
+        normalize_float_arr(&mut vals);
+        let [x, y, z, w] = vals;
+        Self::VecF32::new(x, y, z, w)
+    }
+
+    fn normalize_f64(&self) -> Self::VecF64 {
+        let mut vals = [self.x.to_f64().unwrap(), self.y.to_f64().unwrap(), self.z.to_f64().unwrap(), self.w.to_f64().unwrap()];
+        normalize_float_arr(&mut vals);
+        let [x, y, z, w] = vals;
+        Self::VecF64::new(x, y, z, w)
+    }
+
+    fn precision_eq(&self, other: &Self, precision: T) -> bool {
+
+        let cmp_vals = [(self.x, other.x), (self.y, other.y), (self.z, other.z), (self.w, other.w)];
+        cmp_vals.iter().all(|(s, o)| (*s - *o).abs() <= precision)
     }
 
     fn add(&self, other: &Self) -> Self {
