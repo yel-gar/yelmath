@@ -2,6 +2,7 @@ mod vectors;
 mod errors;
 mod matrices;
 mod types;
+mod util;
 
 #[cfg(test)]
 mod tests {
@@ -110,6 +111,46 @@ mod tests {
         assert_eq!(v2d.invert(), v2dr);
         assert_eq!(v3d.invert(), v3dr);
         assert_eq!(v4d.invert(), v4dr);
+    }
+
+    #[test]
+    fn vec_normalize() {
+        let v2d = Vector2D::new(5, -2);
+        let v2drf32 = Vector2D::new(1.0f32, -0.4);
+        let v2drf64 = Vector2D::new(1.0f64, -0.4);
+
+        let v3d = Vector3D::new(5, -2, 4);
+        let v3drf32 = Vector3D::new(1.0f32, -0.4, 0.8);
+        let v3drf64 = Vector3D::new(1.0f64, -0.4, 0.8);
+
+        let v4d = Vector4D::new(5, -2, 4, -1);
+        let v4drf32 = Vector4D::new(1.0f32, -0.4, 0.8, -0.2);
+        let v4drf64 = Vector4D::new(1.0f64, -0.4, 0.8, -0.2);
+
+        assert_eq!(v2d.normalize_f32(), v2drf32);
+        assert_eq!(v2d.normalize_f64(), v2drf64);
+        assert_eq!(v3d.normalize_f32(), v3drf32);
+        assert_eq!(v3d.normalize_f64(), v3drf64);
+        assert_eq!(v4d.normalize_f32(), v4drf32);
+        assert_eq!(v4d.normalize_f64(), v4drf64);
+    }
+
+    #[test]
+    fn vec_precision_eq() {
+        let v2_1 = Vector2D::new(1.0, 0.0);
+        let v2_2 = Vector2D::new(1.005, 0.0);
+        assert!(v2_1.precision_eq(&v2_2, 0.01));
+        assert!(!v2_1.precision_eq(&v2_2, 0.0001));
+
+        let v3_1 = Vector3D::new(1.0, 0.0, 0.);
+        let v3_2 = Vector3D::new(1.005, 0.0, 0.);
+        assert!(v3_1.precision_eq(&v3_2, 0.01));
+        assert!(!v3_1.precision_eq(&v3_2, 0.0001));
+
+        let v4_1 = Vector4D::new(1.0, 0.0, 0., 5.);
+        let v4_2 = Vector4D::new(1.005, 0.0, 0., 4.999);
+        assert!(v4_1.precision_eq(&v4_2, 0.01));
+        assert!(!v4_1.precision_eq(&v4_2, 0.0001))
     }
     
     #[test]
@@ -279,6 +320,37 @@ mod tests {
 
         assert_eq!(m3, m3e);
         assert_eq!(m4, m4e);
+    }
+
+    #[test]
+    fn mat_precision_eq() {
+        let m3_1 = Matrix3x3::new([
+            [1., 2., 3.],
+            [2., 8., -4.],
+            [5., 10., 2.]
+        ]);
+        let m3_2 = Matrix3x3::new([
+            [1., 2., 3.],
+            [2., 8.1, -4.],
+            [5., 10., 2.]
+        ]);
+        let m4_1 = Matrix4x4::new([
+            [1., 2., 3., 2.],
+            [2., 8., -4., 3.],
+            [5., 10., 2., 0.],
+            [8., 0., 2., 4.]
+        ]);
+        let m4_2 = Matrix4x4::new([
+            [1., 2., 3., 2.],
+            [2., 8.3, -4., 3.],
+            [5., 10., 2., 0.],
+            [8., 0., 2., 4.]
+        ]);
+
+        assert!(m3_1.precision_eq(&m3_2, 1.));
+        assert!(!m3_1.precision_eq(&m3_2, 0.01));
+        assert!(m4_1.precision_eq(&m4_2, 1.));
+        assert!(!m4_1.precision_eq(&m4_2, 0.01));
     }
     
     #[test]
