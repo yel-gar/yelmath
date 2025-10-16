@@ -44,13 +44,7 @@ impl<T: Scalar> Matrix<T> for Matrix3x3<T> {
     }
 
     fn identity() -> Self {
-        Self::from_func(|i, j| {
-            if i == j {
-                T::one()
-            } else {
-                T::default()
-            }
-        })
+        Self::from_func(|i, j| if i == j { T::one() } else { T::default() })
     }
 
     fn from_func(f: impl Fn(usize, usize) -> T) -> Self {
@@ -176,13 +170,7 @@ impl<T: Scalar> Matrix<T> for Matrix4x4<T> {
     }
 
     fn identity() -> Self {
-        Self::from_func(|i, j| {
-            if i == j {
-                T::one()
-            } else {
-                T::default()
-            }
-        })
+        Self::from_func(|i, j| if i == j { T::one() } else { T::default() })
     }
 
     fn from_func(f: impl Fn(usize, usize) -> T) -> Self {

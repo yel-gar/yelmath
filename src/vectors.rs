@@ -142,7 +142,11 @@ impl<T: Scalar> Vector3D<T> {
     }
 
     pub fn cross(&self, other: &Self) -> Self {
-        Vector3D::new(self.y * other.z - self.z * other.y, self.z * other.x - self.x * other.z, self.x * other.y - self.y * other.x)
+        Vector3D::new(
+            self.y * other.z - self.z * other.y,
+            self.z * other.x - self.x * other.z,
+            self.x * other.y - self.y * other.x,
+        )
     }
 }
 
@@ -192,14 +196,22 @@ impl<T: Scalar> Vector<T> for Vector3D<T> {
     }
 
     fn normalize_f32(&self) -> Self::VecF32 {
-        let mut vals = [self.x.to_f32().unwrap(), self.y.to_f32().unwrap(), self.z.to_f32().unwrap()];
+        let mut vals = [
+            self.x.to_f32().unwrap(),
+            self.y.to_f32().unwrap(),
+            self.z.to_f32().unwrap(),
+        ];
         normalize_float_arr(&mut vals);
         let [x, y, z] = vals;
         Self::VecF32::new(x, y, z)
     }
 
     fn normalize_f64(&self) -> Self::VecF64 {
-        let mut vals = [self.x.to_f64().unwrap(), self.y.to_f64().unwrap(), self.z.to_f64().unwrap()];
+        let mut vals = [
+            self.x.to_f64().unwrap(),
+            self.y.to_f64().unwrap(),
+            self.z.to_f64().unwrap(),
+        ];
         normalize_float_arr(&mut vals);
         let [x, y, z] = vals;
         Self::VecF64::new(x, y, z)
@@ -316,22 +328,36 @@ impl<T: Scalar> Vector<T> for Vector4D<T> {
     }
 
     fn normalize_f32(&self) -> Self::VecF32 {
-        let mut vals = [self.x.to_f32().unwrap(), self.y.to_f32().unwrap(), self.z.to_f32().unwrap(), self.w.to_f32().unwrap()];
+        let mut vals = [
+            self.x.to_f32().unwrap(),
+            self.y.to_f32().unwrap(),
+            self.z.to_f32().unwrap(),
+            self.w.to_f32().unwrap(),
+        ];
         normalize_float_arr(&mut vals);
         let [x, y, z, w] = vals;
         Self::VecF32::new(x, y, z, w)
     }
 
     fn normalize_f64(&self) -> Self::VecF64 {
-        let mut vals = [self.x.to_f64().unwrap(), self.y.to_f64().unwrap(), self.z.to_f64().unwrap(), self.w.to_f64().unwrap()];
+        let mut vals = [
+            self.x.to_f64().unwrap(),
+            self.y.to_f64().unwrap(),
+            self.z.to_f64().unwrap(),
+            self.w.to_f64().unwrap(),
+        ];
         normalize_float_arr(&mut vals);
         let [x, y, z, w] = vals;
         Self::VecF64::new(x, y, z, w)
     }
 
     fn precision_eq(&self, other: &Self, precision: T) -> bool {
-
-        let cmp_vals = [(self.x, other.x), (self.y, other.y), (self.z, other.z), (self.w, other.w)];
+        let cmp_vals = [
+            (self.x, other.x),
+            (self.y, other.y),
+            (self.z, other.z),
+            (self.w, other.w),
+        ];
         cmp_vals.iter().all(|(s, o)| (*s - *o).abs() <= precision)
     }
 
