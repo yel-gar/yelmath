@@ -116,23 +116,23 @@ mod tests {
     #[test]
     fn vec_normalize() {
         let v2d = Vector2D::new(5, -2);
-        let v2drf32 = Vector2D::new(1.0f32, -0.4);
-        let v2drf64 = Vector2D::new(1.0f64, -0.4);
+        let v2drf32 = Vector2D::new(0.92f32, -0.37);
+        let v2drf64 = Vector2D::new(0.92f64, -0.37);
 
         let v3d = Vector3D::new(5, -2, 4);
-        let v3drf32 = Vector3D::new(1.0f32, -0.4, 0.8);
-        let v3drf64 = Vector3D::new(1.0f64, -0.4, 0.8);
+        let v3drf32 = Vector3D::new(0.75f32, -0.3, 0.6);
+        let v3drf64 = Vector3D::new(0.75f64, -0.3, 0.6);
 
         let v4d = Vector4D::new(5, -2, 4, -1);
-        let v4drf32 = Vector4D::new(1.0f32, -0.4, 0.8, -0.2);
-        let v4drf64 = Vector4D::new(1.0f64, -0.4, 0.8, -0.2);
+        let v4drf32 = Vector4D::new(0.74f32, -0.3, 0.59, -0.15);
+        let v4drf64 = Vector4D::new(0.74f64, -0.3, 0.59, -0.15);
 
-        assert_eq!(v2d.normalize_f32(), v2drf32);
-        assert_eq!(v2d.normalize_f64(), v2drf64);
-        assert_eq!(v3d.normalize_f32(), v3drf32);
-        assert_eq!(v3d.normalize_f64(), v3drf64);
-        assert_eq!(v4d.normalize_f32(), v4drf32);
-        assert_eq!(v4d.normalize_f64(), v4drf64);
+        assert!(v2d.normalize_f32().precision_eq(&v2drf32, 0.01));
+        assert!(v2d.normalize_f64().precision_eq(&v2drf64, 0.01));
+        assert!(v3d.normalize_f32().precision_eq(&v3drf32, 0.01));
+        assert!(v3d.normalize_f64().precision_eq(&v3drf64, 0.01));
+        assert!(v4d.normalize_f32().precision_eq(&v4drf32, 0.01));
+        assert!(v4d.normalize_f64().precision_eq(&v4drf64, 0.01));
     }
 
     #[test]
