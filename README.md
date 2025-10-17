@@ -12,12 +12,12 @@ small rendering / physics / game logic.
 
 ## 📑 Contents
 
-- [Features](#features)
-- [Solutions / Design](#solutions-design)
-- [Project Structure](#project-structure)
-- [Usage](#usage)
-- [Running the tests](#running-the-tests)
-- [License](#license)
+- [Features](#-features)
+- [Solutions / Design](#%EF%B8%8F-solutions--design)
+- [Project Structure](#-project-structure)
+- [Usage](#-usage)
+- [Running the tests](#%EF%B8%8F-running-the-tests)
+- [License](#-license)
 
 ---
 
